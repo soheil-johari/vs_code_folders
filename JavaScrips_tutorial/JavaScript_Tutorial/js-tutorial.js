@@ -217,7 +217,7 @@ function do_while() {
   do {
     console.log(i);
     i++;
-  } while (i < 5);
+  } while (i < 1010);
 }
 do_while();
 
@@ -244,7 +244,7 @@ let i1 = 0;
 while (i1 <= 10) {
   if (i1 == 5) {
     i1++;
-    continue;
+    break;
   }
   console.log(i1);
   i1++;
@@ -288,6 +288,7 @@ function createCircle /* Camel Notation*/(radius) {
 let circle1 = createCircle(1);
 console.log(circle1);
 let circle2 = createCircle(2);
+console.log(circle2);
 
 function constructor_function() {
   // constructor function
@@ -323,10 +324,10 @@ values instead of static property names. it allows you to manipulate
 objects more flexibly by dynamically setting or retrieving properties at runtime*/
 const obj = {};
 // Adding a property dynamically
-const propertyName = "name";
+const propertyName = ["name"];
 const propertyValue = ["john", "farhad"];
-obj[propertyName] = propertyValue;
-
+objpropertyName = propertyValue;
+console.log(obj);
 for (let key in obj) {
   console.log(obj[key].join(" "));
 }
@@ -371,11 +372,12 @@ function PrimitiveTypeVsRefrenceType() {
   // we want to prove thst we can't change primitive value becuse its stored by value
   // without initial address
   let nummber = 10;
-
+  nummber.length = 0;
+  console.log(number);
   function increase(number) {
-    return number + 1;
+    return number++;
   }
-
+  console.log(nummber);
   number = increase(nummber);
   console.log(number); // Output: 11
   console.log(nummber); // Output: 10
@@ -389,6 +391,7 @@ function PrimitiveTypeVsRefrenceType() {
     console.log(x.number1);
   }
   increase(x); // correct
+  console.log(x);
   increase(x.number1); // یعنی از ادرس ایکس مقدار نامبر 1
   console.log(x.number1);
   // this not gonna work because by using increase(x.number1)
@@ -403,6 +406,8 @@ function PrimitiveTypeVsRefrenceType() {
   function increase(obj) {
     obj.number1++;
   }
+  /* In JavaScript, objects are compared based on their references or memory addresses,
+  not their property values.*/
 
   increase(x1);
   console.log(x1.number1);
@@ -420,7 +425,7 @@ function Obj_Create() {
     };
   }
 
-  let x = new Greet("soheil");
+  let x = new Greet("soheil", 20);
   x.log();
 
   let y = Object.create(x, {
@@ -429,8 +434,8 @@ function Obj_Create() {
   });
 
   y.log();
+  console.log();
 }
-
 Obj_Create();
 
 function obj_properties() {
@@ -467,7 +472,7 @@ function assign_obj() {
   /* This method copies the values of all enumerable properties
 from one or more source object into a target object.*/
 
-  const target = { a: 10, b: "2" };
+  const target = { a: 10, b: "4" };
   const source = { j: "kolly", justice: "in low distance" };
 
   const bitch = Object.assign(target, source);
@@ -485,28 +490,31 @@ as adding or moving or changing property values*/
   console.log(person);
 }
 
-// best way to copies object property and assign it
-// to another object
+function BestAssign() {
+  // best way to copies object property and assign it
+  // to another object
 
-let adv = {
-  name: "soheil",
-  lname: "johari",
-  draw() {
-    console.log(`Hello ${this.name} ${this.lname}`);
-  },
-};
+  let adv = {
+    name: "soheil",
+    lname: "johari",
+    draw() {
+      console.log(`Hello ${this.name} ${this.lname}`);
+    },
+  };
 
-let adv_2 = {
-  fname: "ahmad",
-  drawf() {
-    console.log(`Hello, ${this.fname}`);
-  },
-};
+  let adv_2 = {
+    fname: "ahmad",
+    drawf() {
+      console.log(`Hello, ${this.fname}`);
+    },
+  };
 
-const obj = { ...adv, ...adv_2 };
-obj.draw();
-obj.drawf();
-
+  const obj = { ...adv, ...adv_2 };
+  obj.draw();
+  obj.drawf();
+  console.log(obj);
+}
+BestAssign();
 // Math method
 
 // get a random number between two digit
@@ -572,7 +580,7 @@ function StringMethod() {
   //split()
   const str6 = "Apple,Banana,Orange";
   const arr = str6.split(",");
-  console.log(arr.length); // Output:3 ["Apple", "Banana", "Orange"]
+  console.log(arr); // Output:3 ["Apple", "Banana", "Orange"]
 
   // substring()
   const str7 = "Hello World";
@@ -582,7 +590,7 @@ function StringMethod() {
   // startsWith() and endsWith()
   const str8 = "Hello World";
   console.log(str8.startsWith("Hello")); // Output: true
-  console.log(str8.endsWith("World")); // Output: true
+  console.log(str8.endsWith("world")); // Output: true
 
   // includes()
   const str9 = "hello world";
@@ -592,7 +600,7 @@ function StringMethod() {
   const str10 = "Hello, World!";
   console.log(str10.slice(0, 5)); // Output: "Hello"
   console.log(str10.slice(7)); // Output: "World!"
-  console.log(str10.slice(0, -7)); // Output: "Hello"
+  console.log(str10.slice(0, -8)); // Output: "Hello"
   console.log(str10.slice(-6)); // Output: "World!"
   console.log(str10.slice(0)); // Output: "Hello, World!"
 
@@ -604,12 +612,9 @@ function StringMethod() {
   console.log(str11);
 
   // finding an element in array
-  const str12 = [
-    { id: 1, name: "a" },
-    { id: 2, name: "b" },
-  ];
+  const str12 = [(one = { id: 1, name: "a" }), (two = { id: 2, name: "b" })];
   console.log(str12);
-  console.log(str12.includes({ id: 1, name: "a" }));
+  console.log(str12.includes(one));
   /* The includes() method checks if an element is present in an array
   based on its value. In this case, you're trying to check if an object
   with id: 1 and name: "a" exists in the str12 array.
@@ -670,15 +675,18 @@ numbers.length = 0; // you are modifying the original
 // Or
 numbers.splice(0, numbers.length);
 console.log(another); // []
+console.log(numbers);
 
 // But
 
 let numbers1 = [1, 2, 3, 4, 5];
 let another1 = numbers1;
+numbers1[5] = 1;
 numbers1 = []; // this is make a new numbers with the an empty brackect
 // and the origin number still holds the reference to the original array
 // thats why another1 is not an empty bracket
 console.log(another1); // Output: [ 1, 2, 3, 4, 5 ]
+console.log(numbers1);
 
 // concat and object combining with array
 const first = [1, 2, 3];
@@ -690,10 +698,13 @@ console.log(addi);
 const slice = addi.slice(0, -4);
 console.log(slice);
 
-const objfirst = [{ id: 1 }]; // using {} inside of array
+let objfirst = [{ id: 1 }]; // using {} inside of array
 // this goona make tha same type with different value
 objfirst[0].id = 10; /* you changing property from an object inside the
 array not array itself that's why const property doesn't change*/
+objfirst.push({ name: "soheil" });
+console.log(objfirst);
+
 const combined = objfirst.concat(second);
 
 console.log(combined);
@@ -705,7 +716,13 @@ number.forEach(function (num) {
   console.log(num);
 });
 // or
-number.forEach((num, i) => console.log(i + 1, num));
+number.forEach((num, i) => console.log(i, num));
+
+const names = ["soheil", "sabihe", "gol", "ahmad"];
+
+names.forEach((user, index) => {
+  console.log("number[" + index + "] is " + user);
+});
 
 function ArrayRandomNum() {
   // sorting arrayobject random number
@@ -725,7 +742,7 @@ function ArrayRandomNum() {
 
   // example:
   function getRandomArbitrary(min, max) {
-    return Math.floor(Math.random() * (max - min));
+    return Math.floor(Math.random() * (max - min) + min);
   }
 
   let arrayNum = [];
@@ -796,7 +813,10 @@ function mapping() {
   // mapping obj
   const prompt1 = ["soheil", "ahmad", "sabihe", "gol"];
 
-  const mappingobj = prompt1.map((product) => ({ value: product }));
+  const mappingobj = prompt1
+    .map((product) => ({ value: product }))
+    .map((obj) => obj.value)
+    .join(", ");
   console.log(mappingobj);
 
   // clean code
@@ -818,7 +838,7 @@ function mapping() {
 // function -> global(window,global)
 
 // global object in beowser => window
-//global object in node => glabal
+//global object in node => global
 
 //1- function as method (this):
 const video = {
@@ -830,6 +850,7 @@ const video = {
 
 video.play();
 /* (this) goona show all property
+of video constant
  which is related to that function in the object
  So when you log this, it will 
 show all the properties and methods of the video object.
@@ -895,6 +916,17 @@ function assignment_operator() {
   }
 
   sum(1, 2, 3, 4, 5, 6);
+
+  function sum1() {
+    let sum = 0;
+    for (let i = 0; i < arguments.length; i++) {
+      sum += arguments[i];
+    }
+    return sum;
+  }
+
+  let total = sum1(2, 3, 4, 5, 5, 3, 5, 5, 6, 4);
+  console.log(total);
 }
 
 function reduce() {
@@ -916,10 +948,8 @@ accumulator = a, currentvalue = c
 // 3) a=3 , c=3 => a=6
 // 4) a=6 , c=4 => a=10
 // 5) a=10 , c=5 => a=15
-// 6) a=15 , c=-6 => a=9
-sum = 9
+sum = 15
 */
-  console.log(sum);
 }
 
 // Initialization
@@ -928,14 +958,14 @@ function interest(principal, rate, years) {
   years = years || 1;
   return ((principal * rate) / 100) * years;
 }
-console.log(interest(410000, 18, 1));
+console.log(interest(20000));
 
 // es6 tutorial
 
 function interest1(principal1, rate1 = 18, years1 = 1) {
   return ((principal1 * rate1) / 100) * years1;
 }
-console.log(interest1(210000));
+console.log(interest1(210000, 23));
 
 function getset() {
   // Getter and Setters
@@ -986,10 +1016,10 @@ function args() {
   function sum(discount, ...args) {
     const total = args.reduce((a, b) => a + b, 0);
     console.log(total);
-    return total * (1 - discount).toFixed(2);
+    return total * (1 - discount);
   }
 
-  console.log(sum(0.5, 1, 2, 3, 4, 5, 17));
+  console.log(sum(0.5, 1, 2, 4, 5, 17));
 }
 
 function scope() {
@@ -1009,7 +1039,7 @@ function scope() {
     const message = "johari";
     console.log(message);
   }
-
+  stop();
   // another example
   const myGlobalVariable = "Hello, global scope!";
 
@@ -1061,20 +1091,44 @@ function Try_Catch() {
   }
 }
 
-function playVideo(arg1, arg2) {
-  console.log(this);
-  console.log(arg1, arg2);
+function Builtin_method() {
+  function playVideo(arg1, arg2) {
+    console.log(this);
+    console.log(arg1, arg2);
+  }
+
+  // loging by call
+  playVideo.call({ name: "soheil" }, "arg1 value", "arg2 value");
+
+  // logging by apply
+  playVideo.apply({ name1: "johari" }, ["arg1 value", "arg2 value"]);
+
+  // loging by using bind
+  const log = playVideo.bind({ name2: "qeshmi" }, "arg1 value", "arg2 value");
+  log();
+
+  const person = {
+    fullname: function () {
+      return this.firstname + " " + this.lastname;
+    },
+  };
+
+  const person1 = {
+    firstname: "john",
+    lastname: "due",
+  };
+
+  const person2 = {
+    firstname: "soheil",
+    lastname: "johari",
+  };
+
+  console.log(person.fullname.call(person1)); // one of the usage of call
+  console.log(person.fullname.apply(person1)); // one of the usage of call
+
+  const bind = person.fullname.bind(person2); // one of the usage of call
+  console.log(bind());
 }
-
-// loging by call
-playVideo.call({ name: "soheil" }, "arg1 value", "arg2 value");
-
-// loging by apply
-playVideo.apply({ name1: "johari" }, ["arg1 value", "arg2 value"]);
-
-// loging by using bind
-const log = playVideo.bind({ name2: "qeshmi" }, "arg1 value", "arg2 value");
-log();
 
 function prototype() {
   // Procedural programming
@@ -1102,6 +1156,7 @@ in one side and objects are on the other site*/
     },
   };
   console.log(employee.getWage());
+  console.log(employee.baseSalary);
 
   /* the main reason encapsulation much better than regular way
 is we don't have additional parameters for getway function
@@ -1115,7 +1170,7 @@ in programming that aims to simplify complex
   only the essential functionalities or interfaces.*/
   function Cricle(radius) {
     this.radius = radius;
-    let defaultLocation = { x: 0, y: 0 };
+    let defaultLocation = { x: 0, y: 0 }; // privating variable by (let)
     let cPL = function (factor) {
       // ...
       console.log("Hi");
@@ -1123,6 +1178,7 @@ in programming that aims to simplify complex
     this.draw = function () {
       cPL();
       console.log("draw");
+      console.log(defaultLocation);
     };
   }
 
@@ -1146,7 +1202,8 @@ in programming that aims to simplify complex
 
   // Child object constructor inheriting from Animal
   function Dog(name, breed) {
-    Animal.call(this, name);
+    Animal.call(this, name); // to inherit the "name" property from the "animal"
+    // constructor, the dog constructor will have access to the sayName method/
     this.breed = breed;
   }
   // Inheriting the prototype methods from Animal
@@ -1176,7 +1233,9 @@ then he gonna check through prototype and check it*/
 /*but When you use classes there is no need to use prototype property
 inside of class because all instance of class are in same container
 but if you want to add method or property outside of class
-you will needed to use prototype property*/
+you will needed to use prototype property 
+in classes you can use prototype property for constructor of the class (only main class)
+not for instances*/
 function Person(name, age) {
   this.name = name;
   this.age = age;
@@ -1188,3 +1247,86 @@ Person.prototype.greet = function () {
 
 const john = new Person("John", 25);
 console.log(john.greet()); // Output: Hello, my name is John and I am 25 years old.
+
+// object-oriented-programming
+function Oop_prototype() {
+  userOne = {
+    email: "soheilj92@gmail.com",
+    name: "soheil",
+    loggin() {
+      console.log(this.name + " has logged in");
+    },
+    logout() {
+      console.log(this.name + " has logout");
+    },
+  };
+
+  //changing variable name from object
+  let prompt1 = "name";
+  userOne[prompt1] = "sabihe";
+  console.log(userOne.name); // Output: sabihe
+
+  // adding property to that object
+  userOne.age = 18;
+  console.log(userOne.age);
+
+  // or function
+  userOne.method = function () {
+    console.log(this.name + " hello");
+  };
+  userOne.method(); // Output: sabihe hello
+
+  class User {
+    constructor(email, name) {
+      this.email = email;
+      this.name = name;
+      this.score = 0;
+    }
+    login() {
+      console.log(this.email, "has been logged in");
+      return this;
+    }
+    logout() {
+      console.log(this.email, "has been logged out");
+      return this;
+    }
+    updateScore() {
+      // every time you use this method in console your scroe will increase for one user
+      this.score++;
+      console.log(this.email, " score is now ", this.score);
+      return this;
+    }
+  }
+
+  class Admin extends User {
+    deleteUser(user) {
+        users.filter((u) => {
+        return u.email != user.email;
+      });
+    }
+  }
+
+  // constanst
+  const UserOne = new User("sooheilj92@gmail.com", "soheil");
+  const UserTwo = new User("eisa2502999@gmail.com", "eisa");
+  const admin = new Admin("soheilj92@gmail.com", "soheil ragnar");
+
+  let users = [UserOne, UserTwo, admin];
+
+  // logs
+  UserTwo.login()
+    .updateScore()
+    .updateScore()
+    .logout(); /* method chaning by using return this for each instance in class
+ and then you log multipaly */
+  admin.deleteUser(UserTwo);
+
+  //UserTwo.deleteUser(userOne); // this is won't work cause Admin method is child class
+  console.log(users);
+
+  // using prototype for class
+  User.prototype.method = function () {
+    console.log(this.name, "he is the best programmer i have ever seen");
+  };
+  UserOne.method();
+}
