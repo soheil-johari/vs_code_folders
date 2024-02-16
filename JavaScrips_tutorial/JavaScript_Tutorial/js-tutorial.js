@@ -269,55 +269,57 @@ let circle /* object*/ = {
 
 circle.draw();
 
-// Camel Notation: oneTwoThree
-// Pascal Notation: OneTwoThree
+function Object() {
+  // Camel Notation: oneTwoThree
+  // Pascal Notation: OneTwoThree
 
-// factory function: (A factory function can be defined
-// as a function that creates an object and returns it)
-// with this method you can make several object with
-// different properties and gather together logics
-function createCircle /* Camel Notation*/(radius) {
-  return {
-    radius,
-    draw() {
-      console.log("draw");
-    },
-  };
-}
-
-let circle1 = createCircle(1);
-console.log(circle1);
-let circle2 = createCircle(2);
-console.log(circle2);
-
-function constructor_function() {
-  // constructor function
-  /* this another way to make an object
-  a special function that creates and 
-  initializes an object instance of a class*/
-
-  function Circle /*Pascal Notation*/(radius) {
-    this.radius = radius; // (this) refrence an empty object
-    // which we read property or set a property
-    this.draw = function () {
-      console.log("draw", $(this.radius));
+  // factory function: (A factory function can be defined
+  // as a function that creates an object and returns it)
+  // with this method you can make several object with
+  // different properties and gather together logics
+  function createCircle /* Camel Notation*/(radius) {
+    return {
+      radius,
+      draw() {
+        console.log("draw");
+      },
     };
   }
 
-  const cricle = new Circle(1); //! Instead of using the new keyword
-  // with a constructor function, you can use object literals or
-  // factory functions to create objects in JavaScript.
+  let circle1 = createCircle(1);
+  console.log(circle1);
+  let circle2 = createCircle(2);
+  console.log(circle2);
 
-  /* new keyword performs 4 steps when we use it in constructor
+  function constructor_function() {
+    // constructor function
+    /* this another way to make an object
+  a special function that creates and 
+  initializes an object instance of a class*/
+
+    function Circle /*Pascal Notation*/(radius) {
+      this.radius = radius; // (this) refrence an empty object
+      // which we read property or set a property
+      this.draw = function () {
+        console.log("draw", $(this.radius));
+      };
+    }
+
+    const cricle = new Circle(1); //! Instead of using the new keyword
+    // with a constructor function, you can use object literals or
+    // factory functions to create objects in JavaScript.
+
+    /* new keyword performs 4 steps when we use it in constructor
   function
   1: Create a new empty object
   2: Sets the "this" keyword to point to the newly created object.
   3: Executes the code inside the constructor functions
   which initializes the object by setting its properties and defining its methods
   4: Return the newly created object. */
-  console.log(cricle);
+    console.log(cricle);
+  }
+  constructor_function();
 }
-constructor_function();
 /* in js dynamic object properties refer to the ability to add 
 or access properties of an object using variables or dynamic 
 values instead of static property names. it allows you to manipulate 
@@ -1300,7 +1302,7 @@ function Oop_prototype() {
 
   class Admin extends User {
     deleteUser(user) {
-        users.filter((u) => {
+      users = users.filter((u) => {
         return u.email != user.email;
       });
     }
@@ -1312,7 +1314,7 @@ function Oop_prototype() {
   const admin = new Admin("soheilj92@gmail.com", "soheil ragnar");
 
   let users = [UserOne, UserTwo, admin];
-
+  console.log(users);
   // logs
   UserTwo.login()
     .updateScore()
@@ -1320,9 +1322,9 @@ function Oop_prototype() {
     .logout(); /* method chaning by using return this for each instance in class
  and then you log multipaly */
   admin.deleteUser(UserTwo);
+  console.log(users);
 
   //UserTwo.deleteUser(userOne); // this is won't work cause Admin method is child class
-  console.log(users);
 
   // using prototype for class
   User.prototype.method = function () {
@@ -1330,3 +1332,193 @@ function Oop_prototype() {
   };
   UserOne.method();
 }
+
+// JSON
+function Json() {
+  //Json String
+  const jsonString = `{"name":"john", "age":30, "city":"new york"}`;
+
+  //Parsing JSON string to javascript object
+  const jsonObject = JSON.parse(jsonString);
+  console.log(jsonObject);
+
+  // Stringifying Javascript object to JSON string
+  const jsonStringified = JSON.stringify(jsonObject);
+  console.log(jsonStringified);
+
+  const jsonData = require("./data.json"); // require() is node js function
+  // to import json file as module
+  console.log(jsonData);
+  // Use the data retrieved from JSON here
+}
+Json();
+
+function Static() {
+  //Static method
+  class Circle {
+    constructor(radius) {
+      this.radius = radius;
+    }
+    // instance method
+    draw() {
+      console.log("draw");
+    }
+    /*Static Methods: Static methods are defined using the static
+     keyword before the method name. These methods are called 
+     directly on the class without creating an instance of the class.
+      Static methods are useful for defining utility functions or 
+      operations that don't depend on specific instance data.*/
+    static parse(str) {
+      const { radius } = JSON.parse(str);
+      // or
+      // const radius = JSON.parse(str).radius;
+      return new Circle(radius);
+    }
+  }
+
+  //const circle = new Circle(1);
+  const circle1 = Circle.parse('{"radius": "soheil"}'); // using Cricle directly
+  console.log(circle1);
+}
+
+// CallBack function
+function callBackfuc() {
+  function orderPizza(callback) {
+    console.log("ordering pizza...");
+    setTimeout(() => {
+      console.log("wait...");
+    }, 3000);
+    setTimeout(() => {
+      const pizza = "🍕";
+      callback(pizza);
+    }, 20000);
+  }
+
+  function pizzaReady(pizza) {
+    console.log(`${pizza} is ready`);
+    console.log(`Eat the ${pizza}`);
+  }
+
+  function callFriend(friendx) {
+    setTimeout(() => {
+      let friend = "soheil";
+      friendx(friend);
+    }, 3000);
+  }
+
+  function calling(friend) {
+    console.log("call soheil till pizza get ready");
+    console.log("caling soheil");
+    setTimeout(() => {
+      console.log(`${friend} answer`);
+    }, 6000);
+  }
+
+  orderPizza(pizzaReady);
+  callFriend(calling);
+}
+
+// promise
+// basic
+function promise() {
+  function getWeather() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(() => {
+        // Simulating successful data fetching
+        resolve("sunny");
+      }, 2000);
+
+      setTimeout(() => {
+        reject("Error: Unable to fetch weather data");
+      }, 3000);
+    });
+  }
+  // promise result before fulfill(resolve or reject)
+  function promise1(callback) {
+    setTimeout(() => {
+      console.log(callback);
+    }, 1000);
+  }
+  promise1(getWeather());
+
+  const promise = getWeather();
+  promise.then((data) => {
+    console.log(data);
+  });
+
+  // promise result after fulfill(resolve or reject)
+  function promise2(callback) {
+    setTimeout(() => {
+      console.log(callback);
+    }, 4000); // changing the time of log after result
+  }
+  promise2(getWeather());
+
+  // cleaner way and more underestanding way
+  function getWeather() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(() => {
+        resolve("rainy");
+      }, 500);
+    });
+  }
+
+  function getWeatherIcon(weather) {
+    return new Promise(function (resolve, reject) {
+      setTimeout(() => {
+        switch (weather) {
+          case "sunny":
+            resolve("☀️");
+            break;
+          case "cloud":
+            resolve("☁️");
+            break;
+          case "rainy":
+            resolve("🌧️");
+            break;
+          default:
+            reject("No ICON FOUND");
+        }
+      }, 1000);
+    });
+  }
+
+  const promisex = getWeather();
+  console.log(promisex); // output: Promise {<pending>}
+
+  setTimeout(() => {
+    console.log(promisex); // output: Promise {<fulfilled>: 'rainy'}
+  }, 5000);
+
+  function onSuccess(data) {
+    setTimeout(() => {
+      console.log(`weather is ${data}`);
+    }, 3000);
+  }
+
+  function onError(error) {
+    setTimeout(() => {
+      console.log(`Error: ${error}`);
+    }, 3200);
+  }
+
+  function onFinally() {
+    setTimeout(() => {
+      console.log("this is occur rather anyways");
+    }, 3800);
+  }
+
+  getWeather()
+    .then((weather) => getWeatherIcon(weather))
+    .then((data) => onSuccess(data))
+    .catch((error) => onError(error))
+    .finally(onFinally);
+  // or for onsuccess and onError you can say:
+  // getweather.then(onFulfilled, onRejected)
+  // in summary first parameter of then work as onFulfilled(resolve)
+  // and second parameter work as onRejected(reject)
+}
+
+// fetch method
+/* is a built-in browser API that allows you to make network
+ requests and retrieve resources from a server.*/

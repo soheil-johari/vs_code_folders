@@ -120,63 +120,323 @@ function objectConstructor() {
     this.breed = breed;
   }
 
-  //Dog.prototype = Object.create(Animal.prototype);
+  Dog.prototype = Object.create(Animal.prototype);
+
   Dog.prototype.mammal = function () {
     console.log(this.name + " is my name and i have " + this.breed);
   };
   let animal = new Animal("soheil");
-  let dog = new Dog(animal.name, "haski");
+  let dog = new Dog("ahmad", "haski");
 
   animal.sayname();
   dog.mammal();
+  dog.sayname();
 }
 
-function User(email, name) {
-  this.email = email;
-  this.name = name;
-  this.online = false;
+// class prototype
+class User {
+  constructor(name, email) {
+    this.name = name;
+    this.email = email;
+    this.online = false;
+  }
+
+  login() {
+    this.online = true;
+    if (this.online === true) {
+      console.log(this.name, "is online");
+    }
+    console.log(this.email, "is logged in");
+  }
+
+  logout() {
+    this.online = false;
+    if (this.online === false) {
+      console.log(this.name, "is offline");
+    }
+    console.log(this.email, "is logged out");
+  }
 }
 
-User.prototype.login = function () {
-  this.online = true;
-  console.log(this.email, "has logged in");
-};
+class Admin extends User {
+  deleteUser(user) {
+    users = users.filter((u) => {
+      return user.email != u.email;
+    });
+  }
+}
 
-User.prototype.logout = function () {
-  this.online = false;
-  console.log(this.email, "has logged out");
-};
-
-let UserOne = new User("sooheilj92@gmail.com", "soheil johari");
-let UserTwo = new User("abdolrahimT@gmail.com", "Abdi Timar");
+const UserOne = new User("soheil johari", "sooheilj92@gmail.com");
+const UserTwo = new User("ahmad johari", "ahmadjori@gmail.com");
+const admin = new Admin("soheil King", "sooheilpro@gmail.com");
 
 let users = [UserOne, UserTwo];
+UserOne.login();
+UserTwo.logout();
+admin.login();
+
+admin.deleteUser(UserOne);
+users.push(admin);
 console.log(users);
 
-// first way to inherit with function
-// let admin = Object.create(UserOne, {
-//   email: { value: "eisa2502999@gmail.com" },
-//   name: { value: "eisa dardmand" },
-// });
-//
-// console.log(admin);
+function example() {
+  function User(email, name) {
+    // instance member
+    this.email = email;
+    this.name = name;
+    this.online = false;
+  }
 
-// the second one👆
-function Admin(email, name) {
-  User.call(this, email, name);
+  User.prototype.login = function () {
+    this.online = true;
+    console.log(this.name, "has logged in");
+  };
+
+  User.prototype.logout = function () {
+    this.online = false;
+    console.log(this.name, "has logged out");
+  };
+
+  /*In JavaScript, the spread syntax (...) can be used to pass an array
+ of arguments to a function or constructor */
+  function Admin(...args) {
+    User.apply(this, args);
+    // adding special property
+    this.role = "super admin";
+  }
+  // OR
+  /*function Admin(email, name){
+  User.call(this, email, name)
+}*/
+  Admin.prototype = Object.create(User.prototype);
+
+  Admin.prototype.deleteUser = function (user) {
+    users = users.filter((u) => {
+      return user.email != u.email;
+    });
+  };
+
+  const UserOne = new User("sabihejoohari@gmail.com", "sabihe johari");
+  const UserTwo = new User("eisa2502999@gmail.com", "eisa dardmand");
+  const admin = new Admin("sooheilj92@gmail.com", "soheil johari");
+
+  admin.login();
+  let users = [UserOne, UserTwo, admin];
+  admin.deleteUser(UserOne);
+  console.log(users);
+  console.log(admin);
+
+  //returns instance members
+  console.log(Object.keys(admin));
+
+  // return all members instance and prototype
+  for (let key in admin) {
+    console.log(key);
+  }
 }
 
-Admin.prototype = Object.create(User.prototype);
+// promise with class and static
+class WeatherService1 {
+  static getWeather() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(() => {
+        // Simulating successful data fetching
+        resolve("sunny");
+      }, 2000);
 
-// add method to inheritate function
-Admin.prototype.additionalFunc = function () {
-  console.log(this.email, "has logged in as admin");
-};
+      setTimeout(() => {
+        reject("Error: Unable to fetch weather data");
+      }, 3000);
+    });
+  }
 
-let admin1 = new Admin("soheiljohari@gmail.com", "soheil ragnar");
-admin1.login();
-admin1.additionalFunc();
-console.log(admin1);
+  static example1() {
+    function promise1(callback) {
+      setTimeout(() => {
+        console.log(callback);
+      }, 1000);
+    }
+    promise1(WeatherService1.getWeather());
 
-let users1 = [UserOne, UserTwo, admin1];
-console.log(users1);
+    const promise = WeatherService1.getWeather();
+    promise
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    function promise2(callback) {
+      setTimeout(() => {
+        console.log(callback);
+      }, 4000);
+    }
+    promise2(WeatherService1.getWeather());
+  }
+}
+
+WeatherService1.example1();
+
+// promise with class and constructor
+
+class WeatherService2 {
+  constructor() {
+    this.getWeather = () => {
+      return new Promise(function (resolve, reject) {
+        setTimeout(() => {
+          resolve("sunny");
+        }, 2000);
+
+        setTimeout(() => {
+          reject("Error: Unable to fetch weather data");
+        }, 3000);
+      });
+    };
+
+    this.example1 = () => {
+      function promise1(callback) {
+        setTimeout(() => {
+          console.log(callback);
+        }, 1000);
+      }
+      promise1(this.getWeather());
+
+      const promise = this.getWeather();
+      promise.then((data) => {
+        console.log(data);
+      });
+
+      function promise2(callback) {
+        setTimeout(() => {
+          console.log(callback);
+        }, 4000);
+      }
+      promise2(this.getWeather());
+    };
+  }
+}
+
+const weatherService = new WeatherService2();
+weatherService.example1();
+
+// promise practice
+function Mood() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("freak");
+    }, 700);
+  });
+}
+
+function moodIcon(mood) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      switch (mood) {
+        case "happy":
+          resolve("😀");
+          break;
+        case "sad":
+          resolve("☹️");
+          break;
+        case "freak":
+          resolve("😵‍💫");
+        default:
+          reject("no icon found");
+      }
+    }, 1000);
+  });
+}
+
+function onSuccessMod(data) {
+  setTimeout(() => {
+    console.log(`your mood is ${data} now`);
+  }, 1200);
+}
+
+function onError(error) {
+  setTimeout(() => {
+    console.log(`Error: ${error}`);
+  }, 1300);
+}
+
+const promise = Mood();
+console.log(promise);
+function promiseP() {
+  setTimeout(() => {
+    console.log(promise);
+  }, 4000);
+}
+promiseP();
+
+Mood()
+  .then((mood) => moodIcon(mood))
+  .then((modMessage) => onSuccessMod(modMessage))
+  .catch((error) => onError(error));
+
+// more example about promise(fetch)
+function fetchWeatherData(city) {
+  const apiKey = "68c45745c30f53d47efb5f9fb0961a8a";
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+  return fetch(apiUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching weather data:", error);
+      throw error;
+    });
+}
+
+// Usage example
+const searchBtn = document.getElementById("searchBtn");
+const searchInput = document.getElementById("searchInput");
+searchBtn.addEventListener("keypress", function(event){
+  if(event.key == "Enter"){
+    event.preventDefault();
+    const WeatherData = [
+      {
+        temperature: (data.main.temp - 273.15).toFixed(2),
+        description: data.weather[0].main,
+        humidity: data.main.humidity,
+        country: data.sys.country,
+        city: data.name,
+      },
+    ];
+    WeatherData.forEach((data) => {
+      let markUp = "";
+      for (let key in data) {
+        markUp += `<li>${key}: ${data[key]}</li>`;
+      }
+
+      document
+        .querySelector("#weatherResult")
+        .insertAdjacentHTML("afterbegin", markUp);
+    });
+  }
+})
+searchBtn.addEventListener("click", function () {
+  const city = searchInput.value;
+  fetchWeatherData(city)
+    .then((WeatherData) => {
+      //console.log(`Weather Data`, data);
+
+      return WeatherData
+      
+      //WeatherDataInfo.forEach((value) => {
+      //  console.log(value);
+      //});
+      //for(let value in WeatherDataInfo){
+      //  console.log(WeatherDataInfo[value]);
+      //}
+    })
+
+    .catch((error) => {
+      console.error(`An error ouccurred ${error}`);
+    });
+});
