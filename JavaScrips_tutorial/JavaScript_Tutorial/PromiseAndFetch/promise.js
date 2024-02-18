@@ -137,26 +137,61 @@ Mood()
   .then((modMessage) => onSuccessMod(modMessage))
   .catch((error) => onError(error));
 // Promise and async/await
-function myPromise() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const randomNum = Math.random();
-      if (randomNum < 0.5) {
-        resolve(`Success: ${randomNum.toFixed(2)}`);
-      } else {
-        reject(`Error: ${randomNum.toFixed(2)}`);
-      }
-    }, 1000);
-  });
-}
-
-async function start() {
-  try {
-    const result = await myPromise();
-    console.log(result);
-  } catch (error) {
-    console.error(error);
+function asyncPromise() {
+  function Mood() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("freak");
+      }, 500);
+    });
   }
-}
 
-start();
+  function moodIcon(mood) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        switch (mood) {
+          case "happy":
+            resolve("😀");
+            break;
+          case "sad":
+            resolve("☹️");
+            break;
+          case "freak":
+            resolve("😵‍💫");
+          default:
+            reject("no icon found");
+        }
+      }, 1000);
+    });
+  }
+  function onSuccessMod(data) {
+    setTimeout(() => {
+      console.log(`your mood is ${data} now`);
+    }, 1200);
+  }
+
+  function onError(error) {
+    setTimeout(() => {
+      console.log(`Error: ${error}`);
+    }, 1300);
+  }
+
+  const promise = Mood();
+  console.log(promise);
+
+  setTimeout(() => {
+    console.log(promise);
+  }, 4000);
+
+  async function start() {
+    try {
+      const mood = await Mood();
+      const modMessage = await moodIcon(mood);
+      onSuccessMod(modMessage);
+    } catch (error) {
+      onError(error);
+    }
+  }
+
+  start();
+}
