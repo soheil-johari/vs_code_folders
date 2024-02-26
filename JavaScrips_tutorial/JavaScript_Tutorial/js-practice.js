@@ -326,6 +326,9 @@ function Mood() {
     setTimeout(() => {
       resolve("freak");
     }, 700);
+    setTimeout(()=>{
+      reject("freak")
+    },800)
   });
 }
 
@@ -375,68 +378,97 @@ Mood()
   .catch((error) => onError(error));
 
 // more example about promise(fetch)
-function fetchWeatherData(city) {
+async function fetchWeatherData(city) {
   const apiKey = "68c45745c30f53d47efb5f9fb0961a8a";
   const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
-  return fetch(apiUrl)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  try {
+    const response = await fetch(apiUrl);
 
-      return response.json();
-    })
-    .catch((error) => {
-      console.error("Error fetching weather data:", error);
-      throw error;
-    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching weather data: ${error}`);
+    throw error;
+  }
 }
 
-// Usage example
+// Usage example with async/await
 const searchBtn = document.getElementById("searchBtn");
-const searchInput = document.getElementById("searchInput");
-searchBtn.addEventListener("keypress", function(event){
-  if(event.key == "Enter"){
-    event.preventDefault();
-    const WeatherData = [
-      {
-        temperature: (data.main.temp - 273.15).toFixed(2),
-        description: data.weather[0].main,
-        humidity: data.main.humidity,
-        country: data.sys.country,
-        city: data.name,
-      },
-    ];
-    WeatherData.forEach((data) => {
-      let markUp = "";
-      for (let key in data) {
-        markUp += `<li>${key}: ${data[key]}</li>`;
-      }
+const resultInput = document.getElementById("searchInput");
 
-      document
-        .querySelector("#weatherResult")
-        .insertAdjacentHTML("afterbegin", markUp);
-    });
+function renderWeatherData(data) {
+  const weatheData = [
+    {
+      temperature: (data.main.temp - 273.15).toFixed(2) + "°C",
+      description: data.weather[0].main,
+      humidity: data.main.humidity + "%",
+      country: data.sys.country,
+      city: data.name,
+    },
+  ];
+  weatheData.forEach((weather) => {
+    let list = "";
+    for (let key in weather) {
+      list += `<li>${key}: ${weather[key]}</li>`;
+    }
+
+    document
+      .querySelector("#weatherResult ul")
+      .insertAdjacentHTML("afterbegin", list);
+  });
+}
+
+// Function to fetch and result of render data
+async function fetchAndRender(city) {
+  try {
+    const data = await fetchWeatherData(city);
+    renderWeatherData(data);
+  } catch (error) {
+    console.error(`An error occurred ${error}`);
   }
-})
-searchBtn.addEventListener("click", function () {
-  const city = searchInput.value;
-  fetchWeatherData(city)
-    .then((WeatherData) => {
-      //console.log(`Weather Data`, data);
+}
 
-      return WeatherData
-      
-      //WeatherDataInfo.forEach((value) => {
-      //  console.log(value);
-      //});
-      //for(let value in WeatherDataInfo){
-      //  console.log(WeatherDataInfo[value]);
-      //}
-    })
+function handleSearch() {
+  const city = resultInput.value;
+  fetchAndRender(city);
+}
 
-    .catch((error) => {
-      console.error(`An error ouccurred ${error}`);
-    });
+searchBtn.addEventListener("click", handleSearch);
+
+searchInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    handleSearch();
+  }
 });
+
+// using api feature and fetch
+const url = "https://api.spotify.com/v1/artists/0Y5tJX1MQlPlqiwlOH1tJY";
+
+async function artistInfo() {
+    const request = new Request(url, {
+        headers: {
+            "Authorization": "Bearer BQD28H321MPHS_5iNf-rPMDI1HkP43OJP-QZf53PmzS5fzqLjjTsxTujcAqJwEbdgHZehstbFOtzP1ESmNr7t34bb1pqShowXhsumJlJXXaMbKY0o-o"
+        }
+    });
+
+    try {
+        const response = await fetch(request);
+        const data = await response.json();
+        
+        if (!response.ok) {
+            console.log(`Server Error: ${data.error.message}`);
+        } else {
+            console.log("Success:");
+            console.log(JSON.stringify(data, null, 2)); // Display the data in a more readable format
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+}
+
+artistInfo();

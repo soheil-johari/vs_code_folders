@@ -1522,3 +1522,138 @@ function promise() {
 // fetch method
 /* is a built-in browser API that allows you to make network
  requests and retrieve resources from a server.*/
+function fetchWeatherData1(city) {
+  const apiKey = "68c45745c30f53d47efb5f9fb0961a8a";
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+  return fetch(apiUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Error fetching weather data:", error);
+      throw error;
+    });
+}
+
+// Usage example
+//DOM elements
+const searchBtn1 = document.getElementById("searchBtn");
+const searchInput1 = document.getElementById("searchInput");
+
+// Function to render weather data on the UI
+function renderWeatherData1(data) {
+  const WeatherData = [
+    {
+      temperature: (data.main.temp - 273.15).toFixed(2) + "°C",
+      description: data.weather[0].main,
+      humidity: data.main.humidity + "%",
+      country: data.sys.country,
+      city: data.name,
+    },
+  ];
+
+  WeatherData.forEach((weather) => {
+    let markup = "";
+    for (let key in weather) {
+      markup += `<li>${key}: ${weather[key]}</li>`;
+    }
+
+    document
+      .querySelector("#weatherResult ul")
+      .insertAdjacentHTML("afterbegin", markup);
+  });
+}
+
+// Function to fetch and result of render data
+function fetchAndRender1(city) {
+  fetchWeatherData1(city)
+    .then((data) => {
+      renderWeatherData1(data);
+    })
+    .catch((error) => {
+      console.error(`An error occurred: ${error}`);
+    });
+}
+
+// Event listener for search button click and input field enter key press
+function handleSearch() {
+  const city = searchInput1.value;
+  fetchAndRender1(city);
+}
+searchInput1.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    handleSearch();
+  }
+});
+
+searchBtn1.addEventListener("click", handleSearch);
+
+// artist info by using api
+const url = "https://api.spotify.com/v1/artists/0Y5tJX1MQlPlqiwlOH1tJY";
+async function artistInfo() {
+  const request = new Request(url, {
+    headers: {
+      Authorization:
+        "Bearer BQD28H321MPHS_5iNf-rPMDI1HkP43OJP-QZf53PmzS5fzqLjjTsxTujcAqJwEbdgHZehstbFOtzP1ESmNr7t34bb1pqShowXhsumJlJXXaMbKY0o-o",
+    },
+  });
+
+  try {
+    const response = await fetch(request);
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+artistInfo();
+
+// getting access token from api
+// making async func and using fetch feature
+// connectet to the html and and ...
+async function _getToken() {
+  const clientId = "58ced6c1abc645acb8cf58e2a6195e37";
+  const clientSecret = "d76bd6dddf5749d9bc843a10ca82b06e";
+  // Website: http://127.0.0.1:5500/index.html
+  // Redirect website: http://127.0.0.1:5500/index.html
+
+  const response = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}`,
+  });
+
+  const data = await response.json();
+  return data.access_token;
+}
+console.log(_getToken());
+
+async function fetchArtistCode(artistName, token) {
+  const response = await fetch(
+    `https://api.spotify.com/v1/search?q=${artistName}&type=artist`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+  return data; // Assuming the first artist in the search results
+}
+
+document.getElementById("search-button").addEventListener("click", async () => {
+  const token = await _getToken();
+  const artistName = document.getElementById("search-input").value;
+  const artistCode = await fetchArtistCode(artistName, token);
+
+  console.log("Artist Code:", artistCode);
+});
+console.log(fetchArtistCode());
